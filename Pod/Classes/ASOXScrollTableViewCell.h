@@ -53,7 +53,7 @@
  Tell the size of Content Cell frame.
  Read-only property.
  */
-@property (nonatomic, readonly) CGSize contentCellSize;
+@property (strong, nonatomic) CGSize contentCellSize;
 
 /**
  Store the table-view index path where each ASOXScrollTableViewCell object is attached to.
