@@ -27,8 +27,6 @@
 
 @interface ASOXScrollTableViewCell () <UICollectionViewDataSource, UICollectionViewDelegate>
 
-@property (nonatomic, readwrite) CGSize contentCellSize;
-
 @end
 
 @implementation ASOXScrollTableViewCell
