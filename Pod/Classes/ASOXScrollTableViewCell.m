@@ -27,9 +27,17 @@
 
 @interface ASOXScrollTableViewCell () <UICollectionViewDataSource, UICollectionViewDelegate>
 
+@property (nonatomic, strong) NSMutableDictionary *scrollPositions;
+
 @end
 
 @implementation ASOXScrollTableViewCell
+
+- (void)prepareForReuse {
+  [super prepareForReuse];
+
+  self.scrollPositions[@(self.tableViewIndexPath.section).stringValue] = [NSValue valueWithCGPoint:self.horizontalScrollContentsView.contentOffset];
+}
 
 + (ASOXScrollTableViewCell *)tableView:(UITableView *)tableView cellForRowInTableViewIndexPath:(NSIndexPath *)tableViewIndexPath withReusableCellIdentifier:(NSString *)cellIdentifier delegate:(id)object {
     
@@ -37,12 +45,21 @@
     
     cell.delegate = object;
     cell.tableViewIndexPath = tableViewIndexPath;
-    
+
+    NSValue *offsetValue;
+    if ((offsetValue = cell.scrollPositions[@(tableViewIndexPath.section).stringValue])) {
+        CGPoint contentOffset = [offsetValue CGPointValue];
+
+        cell.horizontalScrollContentsView.contentOffset = contentOffset;
+    }
+
     return cell;
 }
 
 - (void)awakeFromNib {
     // Initialization code
+    self.scrollPositions = [NSMutableDictionary dictionary];
+
     UICollectionViewCell *horizontalCollectionViewCell = [[[NSBundle mainBundle] loadNibNamed:self.contentCellClass owner:self options:nil] lastObject];
     
     self.contentCellSize = CGSizeMake(horizontalCollectionViewCell.frame.size.width, horizontalCollectionViewCell.frame.size.height);
